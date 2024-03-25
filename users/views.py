@@ -27,14 +27,14 @@ class ProfileUpdateView(generic.UpdateView):
 class RegisterView(generic.CreateView):
     model = User
     form_class = UserRegisterForm
-    success_url = reverse_lazy('users:confirm_email')
+    success_url = reverse_lazy('users:login')
     template_name = 'user_form.html'
 
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        user = form.save()
-        send_mail_for_verify(self.request, user)
-        return response
+    # def form_valid(self, form):
+    #     response = super().form_valid(form)
+    #     user = form.save()
+    #     send_mail_for_verify(self.request, user)
+    #     return response
 
 
 class EmailVerify(generic.View):
@@ -61,10 +61,10 @@ class EmailVerify(generic.View):
 
 
 class CustomPasswordResetView(PasswordResetView):
-    template_name = 'users/password_reset_form.html'
+    template_name = 'password_reset_form.html'
     form_class = CustomPasswordResetForm
     success_url = reverse_lazy('users:password_reset_done')
-    email_template_name = 'users/email_reset.html'
+    email_template_name = 'email_reset.html'
     from_email = settings.EMAIL_HOST_USER
 
 
