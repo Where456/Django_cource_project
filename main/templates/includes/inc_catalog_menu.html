@@ -5,9 +5,9 @@
 
                     {% if user.is_authenticated %}
             <a class="navbar-brand" href="{% url 'users:profile' %}">Профиль</a>
-            <a class="navbar-brand" href="{% url 'main:mailing_list' %}">Рассылки</a>
-            <a class="navbar-brand" href="{% url 'main:mailing_log_list' %}">Отчет о рассылках</a>
-            <a class="navbar-brand" href="{% url 'main:client_list' %}">Клиенты</a>
+            <a class="navbar-brand" href="{% url 'mailing:mailing_list' %}">Рассылки</a>
+<!--            <a class="navbar-brand" href="{% url 'mailing:mailing_log_list' %}">Отчет о рассылках</a>-->
+            <a class="navbar-brand" href="{% url 'mailing:client_list' %}">Клиенты</a>
             {% if perms.blog.add_post %}
             <a class="navbar-brand" href="{% url 'blog:home' %}">Блог</a>
             {% endif %}

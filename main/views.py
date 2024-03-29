@@ -31,6 +31,7 @@ class IndexView(TemplateView):
 class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
     extra_context = {'title': 'Рассылки'}
+    template_name = 'mailing_list.html'
 
     def get_queryset(self):
         user = self.request.user
@@ -46,6 +47,7 @@ class MailingListView(LoginRequiredMixin, ListView):
 class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForm
+    template_name = 'mailing_form.html'
     success_url = reverse_lazy('main:mailing_list')
 
     def get_queryset(self):
@@ -80,6 +82,7 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
 
 class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
+    template_name = 'mailing_confirm_delete.html'
     success_url = reverse_lazy('main:mailing_list')
 
 
