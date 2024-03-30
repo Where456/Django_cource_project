@@ -50,31 +50,30 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     template_name = 'mailing_form.html'
     success_url = reverse_lazy('main:mailing_list')
 
-    def get_queryset(self):
-        user = self.request.user
-        mailing = Mailing.objects.all()
-        if user.is_staff or user.is_superuser:
-            queryset = mailing
-        else:
-            queryset = mailing.client.filter(user=user)
-        return queryset
-
     def form_valid(self, form):
+        # Сначала создаем объект Mailing без сохранения в БД
         mailing = form.save(commit=False)
         mailing.user = self.request.user
         mailing.status = 'CREATE'
+
+        # Обрабатываем текст сообщения, введенный пользователем
+        message_text = form.cleaned_data.get('message_text')
+        if message_text:
+            # Создаем объект Message, если пользователь ввел текст сообщения
+            message = Message.objects.create(header='Создано через рассылку', body=message_text)
+            mailing.message = message
+
+        # Сохраняем объект Mailing
         mailing.save()
 
-        message_service = MessageService(mailing)
-        send_mailing(mailing)
-        message_service.create_task()
-        mailing.status = 'START'
-        mailing.save()
+        # Если есть связанные данные (например, many-to-many), сохраняем их
+        form.save_m2m()
 
-        return super(MailingCreateView, self).form_valid(form)
+        return super().form_valid(form)
 
 
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'mailing_form.html'
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('main:mailing_list')

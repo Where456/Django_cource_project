@@ -19,6 +19,8 @@ class ClientForm(FormStyleMixin, forms.ModelForm):
 
 
 class MailingForm(FormStyleMixin, forms.ModelForm):
+    message_text = forms.CharField(widget=forms.Textarea, required=False, label='Текст сообщения')
+
     class Meta:
         model = Mailing
         exclude = ('is_active', 'user', 'status', 'is_published')
